@@ -25,9 +25,14 @@ Ao lado botão "Redefinir" terá outro botão escrito "Apagar", nele efetivará 
 Para _input_(Gasto): tipoGasto, nomeGasto, empresaGasto, dataGasto e pagamento.
 
 tipoGasto: PIX, Crédito, Débito, Boleto e Cédula/Dinheiro.
+nomeGasto: "Auto completar."
 
-Para __input__(Ganho): tipoGanho, empresaGanho, tipoBanco, servicosPrestados, dataRecebimento.
+Para _input_(Ganho): tipoGanho, empresaGanho, tipoBanco, servicosPrestados, dataRecebimento.
 
 tipoGanho: PIX, Crédito, Débito, Boleto e Cédula/Dinheiro.
 
 Nas duas: tipoBanco.
+
+__Auto Completar:__ É quando usamos um dado já atribuído na tabela, e que podemos utilizá-lo dinamizar.
+__Cédula/Dinheiro__: Um deles será escolhido, não os dois.
+__Banco para dinheiro:__ Quando o cliente for escolher dinheiro, o banco será desativado, indo para tabela __avulso__.
