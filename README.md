@@ -21,6 +21,13 @@ Ao lado botão "Redefinir" terá outro botão escrito "Apagar", nele efetivará 
 
 **Quantas tabelas será necessário?**
 
-Várias tabelas para localizar(GET) o que for procurado. Quais tabelas:
-Para cadastro(Gasto): tipoCompra, nomeCompra, empresas, dataCompra e pagamento.
-Para cadastro(Ganho): tipoEspecie, empresas, servicosPrestados, dataRecebimento.
+
+Para _input_(Gasto): tipoGasto, nomeGasto, empresaGasto, dataGasto e pagamento.
+
+tipoGasto: PIX, Crédito, Débito, Boleto e Cédula/Dinheiro.
+
+Para __input__(Ganho): tipoGanho, empresaGanho, tipoBanco, servicosPrestados, dataRecebimento.
+
+tipoGanho: PIX, Crédito, Débito, Boleto e Cédula/Dinheiro.
+
+Nas duas: tipoBanco.
