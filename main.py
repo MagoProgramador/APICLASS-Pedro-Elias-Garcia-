@@ -1,4 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from typing import List
+
+import models, schemas
+from database import engine, get_db
+
+#ATT 1
 app = FastAPI(
     title="API Financeira",
     description="API para controle de gastos e ganhos de um usuário.",
@@ -126,3 +133,104 @@ def listar_gastos():
 @app.get("/ganhos")
 def listar_ganhos():
     return ganhos
+
+#ATT 2
+
+
+# Cria as tabelas no arquivo financas.db se elas não existirem
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="API de Controle Financeiro")
+
+
+# ==========================================
+# CRUD - GASTOS
+# ==========================================
+
+@app.post("/gastos/", response_model=schemas.GastosSchema, status_code=status.HTTP_201_CREATED)
+def criar_gasto(gasto: schemas.AtribuirGasto, db: Session = Depends(get_db)):
+    db_gasto = models.GastoModel(**gasto.model_dump())
+    db.add(db_gasto)
+    db.commit()
+    db.refresh(db_gasto)
+    return db_gasto
+
+@app.get("/gastos/", response_model=List[schemas.GastosSchema])
+def listar_gastos(db: Session = Depends(get_db)):
+    return db.query(models.GastoModel).all()
+
+@app.get("/gastos/{id_gasto}", response_model=schemas.GastosSchema)
+def obter_gasto(id_gasto: int, db: Session = Depends(get_db)):
+    db_gasto = db.query(models.GastoModel).filter(models.GastoModel.idGasto == id_gasto).first()
+    if not db_gasto:
+        raise HTTPException(status_code=404, detail="Gasto não encontrado")
+    return db_gasto
+
+@app.put("/gastos/{id_gasto}", response_model=schemas.GastosSchema)
+def atualizar_gasto(id_gasto: int, gasto_atualizado: schemas.AtribuirGasto, db: Session = Depends(get_db)):
+    db_gasto = db.query(models.GastoModel).filter(models.GastoModel.idGasto == id_gasto).first()
+    if not db_gasto:
+        raise HTTPException(status_code=404, detail="Gasto não encontrado")
+    
+    for key, value in gasto_atualizado.model_dump().items():
+        setattr(db_gasto, key, value)
+        
+    db.commit()
+    db.refresh(db_gasto)
+    return db_gasto
+
+@app.delete("/gastos/{id_gasto}", status_code=status.HTTP_204_NO_CONTENT)
+def deletar_gasto(id_gasto: int, db: Session = Depends(get_db)):
+    db_gasto = db.query(models.GastoModel).filter(models.GastoModel.idGasto == id_gasto).first()
+    if not db_gasto:
+        raise HTTPException(status_code=404, detail="Gasto não encontrado")
+    db.delete(db_gasto)
+    db.commit()
+    return None
+
+
+# ==========================================
+# CRUD - GANHOS
+# ==========================================
+
+@app.post("/ganhos/", response_model=schemas.GanhosSchema, status_code=status.HTTP_201_CREATED)
+def criar_ganho(ganho: schemas.AtribuirGanho, db: Session = Depends(get_db)):
+    db_ganho = models.GanhoModel(**ganho.model_dump())
+    db.add(db_ganho)
+    db.commit()
+    db.refresh(db_ganho)
+    return db_ganho
+
+@app.get("/ganhos/", response_model=List[schemas.GanhosSchema])
+def listar_ganhos(db: Session = Depends(get_db)):
+    return db.query(models.GanhoModel).all()
+
+@app.get("/ganhos/{id_ganho}", response_model=schemas.GanhosSchema)
+def obter_ganho(id_ganho: int, db: Session = Depends(get_db)):
+    db_ganho = db.query(models.GanhoModel).filter(models.GanhoModel.idGanho == id_ganho).first()
+    if not db_ganho:
+        raise HTTPException(status_code=404, detail="Ganho não encontrado")
+    return db_ganho
+
+@app.put("/ganhos/{id_ganho}", response_model=schemas.GanhosSchema)
+def atualizar_ganho(id_ganho: int, ganho_atualizado: schemas.AtribuirGanho, db: Session = Depends(get_db)):
+    db_ganho = db.query(models.GanhoModel).filter(models.GanhoModel.idGanho == id_ganho).first()
+    if not db_ganho:
+        raise HTTPException(status_code=404, detail="Ganho não encontrado")
+    
+    for key, value in ganho_atualizado.model_dump().items():
+        setattr(db_ganho, key, value)
+        
+    db.commit()
+    db.refresh(db_ganho)
+    return db_ganho
+
+@app.delete("/ganhos/{id_ganho}", status_code=status.HTTP_204_NO_CONTENT)
+def deletar_ganho(id_ganho: int, db: Session = Depends(get_db)):
+    db_ganho = db.query(models.GanhoModel).filter(models.GanhoModel.idGanho == id_ganho).first()
+    if not db_ganho:
+        raise HTTPException(status_code=404, detail="Ganho não encontrado")
+    db.delete(db_ganho)
+    db.commit()
+    return None
+#Honestamente não entendo meu código
