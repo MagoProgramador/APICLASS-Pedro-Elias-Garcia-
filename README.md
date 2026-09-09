@@ -32,6 +32,11 @@ Para _input_(Ganho): tipoGanho, empresaGanho, tipoBanco, servicosPrestados, data
 tipoGanho: PIX, Crédito, Débito, Boleto e Cédula/Dinheiro.
 
 Nas duas: tipoBanco.
+**TabelaTroca:**Estou pensando na ideia de criar uma tabela para realizar a troca de TipoMoeda das tabelas.
+Ex: Tenho R$20,00 no débito, e já está cadastrado no programa, quero sacar, agora possuo R$20,00 em dinheiro, que também será cadastrado no app. Nesta contra-
+dição ocasiona em um dado incorreto de R$40,00 na soma, o que poderá causar confusão nas finanças, logo, criar um método para cancelar um dado e atribuir outro
+dado no lugar(sobrepor)
+
 
 __Auto Completar:__ É quando usamos um dado já atribuído na tabela, e que podemos utilizá-lo dinamizar.
 __Cédula/Dinheiro__: Um deles será escolhido, não os dois.
